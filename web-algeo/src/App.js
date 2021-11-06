@@ -15,8 +15,6 @@ import {
   Center,
   HStack,
   Image,
-  Menu,
-  MenuButton
 } from '@chakra-ui/react';
 import { 
   ChevronDownIcon,
@@ -47,6 +45,7 @@ function App() {
   
   return (
     <ChakraProvider theme={theme}>
+      <Box overflowX="hidden">
       <Heading color="#FFFFFF" fontSize="5xl" fontFamily="poppins" textAlign="center" mt={10} mb={3} minW="100vw"> 
         Smart <span style={{ color: "#01CC90" }}>PNG</span> and <span style={{ color: "#01CC90" }}>JPEG</span> Compressor
       </Heading>
@@ -150,6 +149,7 @@ function App() {
           </Box>
           <Spacer />
         </Flex>
+      </Box>
       </Box>
     </ChakraProvider>
   );
