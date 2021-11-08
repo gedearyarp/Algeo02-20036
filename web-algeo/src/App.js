@@ -1,6 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import imgDefault from "./images/imgDefault.jpg"
 import uploadBigArrow from "./images/uploadBigArrow.png"
+import logoPNG from "./images/logopng.png"
+import { Copyright } from './misc/Copyright'
+import { SocialMediaLinks } from './misc/SocialMediaLinks'
+
 
 import {
   ChakraProvider,
@@ -16,6 +20,8 @@ import {
   Center,
   HStack,
   Image,
+  Stack,
+  StackDivider,
 } from '@chakra-ui/react';
 import { 
   ChevronDownIcon,
@@ -195,7 +201,7 @@ function App() {
                 h="6vh" 
                 w="15vw" 
                 boxShadow="2xl"
-                fontSize="2xl">
+                fontSize="xl">
                 Compress PNG/JPEG <ArrowRightIcon ml={2} color="black"/></Button>
       </Center>
 
@@ -295,9 +301,85 @@ function App() {
         </Flex>
       </Box>
 
-      <Box mt={10} bg="#121633" width="100%" height="10vw">
+      {/* <Box mt={10} bg="#121633" width="100%" height="10vw"> */}
+      <Box
+        as="footer"
+        mt={10}
+        bg="#121633"
+        width="100%"
+        role="contentinfo"
+        mx="auto"
+        maxW="7xl"
+        py="12"
+        px={{
+          base: '4',
+          md: '8',
+        }}
+      >
+        <Stack spacing="10" divider={<StackDivider />}>
+          <Stack
+            direction={{
+              base: 'column',
+              lg: 'row',
+            }}
+            spacing={{
+              base: '10',
+              lg: '28',
+            }}
+          >
+            <Box>
+              <Image
+                boxSize="200px"
+                src={logoPNG}
+                alt="logo PNG"
+              />
+            </Box>
+            <Stack
+              direction={{
+                base: 'column',
+                md: 'row',
+              }}
+              spacing={{
+                base: '10',
+                md: '20',
+              }}
+            >
+          
+              <Center>
+                <Box >
+                  <Text color="White" fontSize="2xl" fontFamily="poppins" fontWeight={700} h ={70}>
+                    Pemuja Hidayah-Mu
+                  </Text>
+                  <Text color="White" fontSize="l" fontFamily="poppins" fontWeight={400}>
+                  I Gede Arya Raditya Parameswara
+                  </Text>
+                  <Text color="White" fontSize="l" fontFamily="poppins" fontWeight={400}>
+                  Januar Budi Ghifari
+                  </Text>
+                  <Text color="White" fontSize="l" fontFamily="poppins" fontWeight={400}>
+                  Rizky Ramadhana P. K.
+                  </Text>
+                </Box>
+              </Center>
 
+            </Stack>
+          </Stack>
+          <Stack
+            direction={{
+              base: 'column-reverse',
+              md: 'row',
+            }}
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Copyright />
+            <SocialMediaLinks />
+          </Stack>
+
+        </Stack>
       </Box>
+
+      {/* </Box> */}
 
       </Box>
     </ChakraProvider>
