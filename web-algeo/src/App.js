@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import imgDefault from "./images/imgDefault.jpg"
 import uploadBigArrow from "./images/uploadBigArrow.png"
 
@@ -6,6 +6,7 @@ import {
   ChakraProvider,
   Box,
   Input,
+  useNumberInput,
   Heading,
   Text,
   extendTheme,
@@ -28,13 +29,59 @@ import "@fontsource/poppins/200.css"
 
 function App() {
   //BG #282A37 CMPNT #01CC90
+  const pictureInputRef = useRef();
   const [isUseRateSettings, setIsUseRateSettings] = useState(0);
-  const [compressionRates, setCompressionRates] = useState(50);
-
+  const [picture, setPicture] = useState(null);
+  const [preview, setPreview] = useState(null);
 
   const handleUseSettings = () => {
       isUseRateSettings ? setIsUseRateSettings(0) : setIsUseRateSettings(1);
-  }
+  };
+  const onChangePicture = e => {
+      const file = e.target.files[0];
+      if (file && file.type.substr(0, 5) === "image") {
+        setPicture(file);
+      }
+      else {
+        setPicture(null);
+      }
+  };
+  console.log('picture: ', picture);
+  
+  useEffect(() => {
+    if (picture) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result);
+      };
+      reader.readAsDataURL(picture);
+    }
+    else {
+      setPreview(null);
+    }
+  }, [picture])
+  console.log('preview: ', preview);
+
+
+
+
+
+  const {
+    getInputProps,
+    getIncrementButtonProps,
+    getDecrementButtonProps,
+  } = useNumberInput({
+    step: 1,
+    defaultValue: 50,
+    min: 1,
+    max: 100,
+  });
+  const inc = getIncrementButtonProps();
+  const dec = getDecrementButtonProps();
+  const compressionRates = getInputProps({ isReadOnly: true });
+
+
+
 
 
   // Styling Background
@@ -62,24 +109,46 @@ function App() {
       <Text color="#FFFFFF" fontFamily="poppins" textAlign="center" fontWeight={200} fontSize="md">
         An ultimate image optimizer to compress your images
       </Text>
+      <input
+        type="file"
+        accept="image/*"
+        style={{ display: 'none' }}
+        onChange={onChangePicture}
+        ref={pictureInputRef}
+      />
       <Box mt ={10} >
         <Center>
-          <Button color="#01CC90" borderStyle="dotted" borderWidth={5} borderColor="#01CC90" width="30vw" height="15vh" boxShadow="xl">
+          <Button onClick={(event) => {
+            event.preventDefault();
+            pictureInputRef.current.click();
+          }} color="#01CC90" borderStyle="dotted" borderWidth={5} borderColor="#01CC90" width="30vw" height="15vh" boxShadow="xl">
             <Flex width="100%">
               <Spacer/>
               <Box>
-                <Image
-                  boxSize="3.5vw"
-                  objectFit="cover"
-                  borderRadius="3px"
-                  src={uploadBigArrow}
-                  alt="Upload your image"
-                />
+                { preview ? (
+                  <Image
+                    boxSize="4vw"
+                    objectFit="cover"
+                    borderRadius="3px"
+                    src={preview}
+                    alt="Upload your image"
+                    style={{ objectFit: 'cover' }}
+                  />
+                ) : (
+                  <Image
+                    boxSize="4vw"
+                    objectFit="cover"
+                    borderRadius="3px"
+                    src={uploadBigArrow}
+                    alt="Upload your image"
+                    style={{ objectFit: 'cover' }}
+                  />
+                )}
               </Box>
               <Spacer/>
               <Box>
-                <Text fontSize="5xl" color="#4be3b6">Click Here!</Text>
-                <Text color="#01CC90" fontSize="xl">to select your image.</Text>
+                <Text fontSize="4xl" color="#FFFFFF">Click here to <span style={{ color: "#8ef1d4" }}>select</span></Text>
+                <Text color="#FFFFFF" fontSize="xl" textAlign="left">or <span style={{ color: "#8ef1d4" }}>change</span> your image.</Text>
               </Box>
               <Spacer/>
             </Flex>
@@ -108,12 +177,12 @@ function App() {
         <Center>
             <Flex>
               <Text color="#01CC90" fontSize="xl" fontFamily="poppins" mr={4} fontWeight={400}>
-                Compression rates  
+                Compression rates (%)
               </Text>
-              <HStack maxW="320px" >
-                <Input color="#FFFFFF"/>
-                <Button colorScheme="teal" variant="outline">-</Button>
-                <Button colorScheme="teal" variant="outline">+</Button>
+              <HStack maxW="320px">
+                <Input {...compressionRates} color="#FFFFFF"/>
+                <Button {...dec} colorScheme="teal" variant="outline">-</Button>
+                <Button {...inc} colorScheme="teal" variant="outline">+</Button>
               </HStack>
             </Flex>
         </Center>
@@ -151,9 +220,9 @@ function App() {
       <Box mt = {10}>
         <Flex>
           <Spacer />
-          <Box bg="#121633" width="24vw" px="2vw" py="2vw" borderRadius="5px">
+          <Box bg="#121633" width="24vw" px="2vw" py="2vw" borderRadius="5px" >
             <Center>
-              <Text color="#01CC90" fontSize="3xl" fontFamily="poppins" mr={4}>
+              <Text color="#01CC90" fontSize="3xl" fontFamily="poppins" mr={4} fontWeight={600}>
                 Before
               </Text>
             </Center>
@@ -169,11 +238,20 @@ function App() {
               />
             </Center>
             <Flex>
-              <Text color="#FFFFFF" fontSize="2xl" fontFamily="poppins" mr={4}>
+              <Text color="#FFFFFF" fontSize="2xl" fontFamily="poppins" mr={4} fontWeight="200">
+                Image Name
+              </Text>
+              <Spacer />
+              <Text color="#01CC90" fontSize="2xl" fontFamily="poppins" mr={4}>
+                testImage.jpg
+              </Text>
+            </Flex>
+            <Flex>
+              <Text color="#FFFFFF" fontSize="2xl" fontFamily="poppins" mr={4} fontWeight="200">
                 Image Size
               </Text>
               <Spacer />
-              <Text color="#FFFFFF" fontSize="2xl" fontFamily="poppins" mr={4}>
+              <Text color="#01CC90" fontSize="2xl" fontFamily="poppins" mr={4}>
                 356.7Kb
               </Text>
             </Flex>
@@ -181,7 +259,7 @@ function App() {
           <Spacer />
           <Box bg="#121633" width="24vw" px="2vw" py="2vw" borderRadius="5px">
             <Center>
-              <Text color="#01CC90" fontSize="3xl" fontFamily="poppins" mr={4}>
+              <Text color="#01CC90" fontSize="3xl" fontFamily="poppins" mr={4} fontWeight={600}>
                 After
               </Text>
             </Center>
@@ -204,11 +282,11 @@ function App() {
               </Center>
             </Box>
             <Flex>
-              <Text color="#FFFFFF" fontSize="2xl" fontFamily="poppins" mr={4}>
+              <Text color="#FFFFFF" fontSize="2xl" fontFamily="poppins" mr={4} fontWeight="200">
                 Image Size
               </Text>
               <Spacer />
-              <Text color="#FFFFFF" fontSize="2xl" fontFamily="poppins" mr={4}>
+              <Text color="#01CC90" fontSize="2xl" fontFamily="poppins" mr={4}>
                 116.1Kb
               </Text>
             </Flex>
