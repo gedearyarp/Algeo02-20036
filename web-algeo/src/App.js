@@ -309,7 +309,7 @@ function App() {
         width="100%"
         role="contentinfo"
         mx="auto"
-        maxW="7xl"
+        // maxW="7xl"
         py="12"
         px={{
           base: '4',
