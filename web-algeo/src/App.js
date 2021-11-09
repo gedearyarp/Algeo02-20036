@@ -4,13 +4,11 @@ import uploadBigArrow from "./images/uploadBigArrow.png"
 import logoPNG from "./images/logopng.png"
 import { Copyright } from './misc/Copyright'
 import { SocialMediaLinks } from './misc/SocialMediaLinks'
-
+import axios from "axios"
 
 import {
   ChakraProvider,
   Box,
-  Input,
-  useNumberInput,
   Heading,
   Text,
   extendTheme,
@@ -18,7 +16,6 @@ import {
   Button,
   Spacer,
   Center,
-  HStack,
   Image,
   Stack,
   StackDivider,
@@ -39,6 +36,7 @@ function App() {
   const [isUseRateSettings, setIsUseRateSettings] = useState(0);
   const [picture, setPicture] = useState(null);
   const [preview, setPreview] = useState(null);
+  const [compressionRates, setCompressionRates] = useState("med");
 
   const handleUseSettings = () => {
       isUseRateSettings ? setIsUseRateSettings(0) : setIsUseRateSettings(1);
@@ -68,23 +66,36 @@ function App() {
   }, [picture])
   console.log('preview: ', preview);
 
+  const handleLowRates = () => {
+      setCompressionRates("low");
+  };
+  const handleMedRates = () => {
+      setCompressionRates("med");
+  };
+  const handleHighRates = () => {
+      setCompressionRates("high");
+  };
 
+  function handlePostQuery() {
+      var myParams = {
+        data: "halo"
+      }
+  
+      if (true) {
+        axios.post('http://127.0.0.1:5000/compress', myParams)
+            .then(function(response) {
+              console.log(response);
+              //Perform action based on response
+            })
+            .catch(function(error) {
+              console.log(error);
+              //Perform action based on error
+            });
+      } else {
+        alert("The search query cannot be empty")
+      }
+  }
 
-
-
-  const {
-    getInputProps,
-    getIncrementButtonProps,
-    getDecrementButtonProps,
-  } = useNumberInput({
-    step: 1,
-    defaultValue: 50,
-    min: 1,
-    max: 100,
-  });
-  const inc = getIncrementButtonProps();
-  const dec = getDecrementButtonProps();
-  const compressionRates = getInputProps({ isReadOnly: true });
 
 
 
@@ -182,14 +193,36 @@ function App() {
       (<Box mt = {5}>
         <Center>
             <Flex>
-              <Text color="#01CC90" fontSize="xl" fontFamily="poppins" mr={4} fontWeight={400}>
-                Compression rates (%)
+              <Text color="#8ef1d4" fontSize="xl" fontFamily="poppins" mr={4} fontWeight={400}>
+                Compression rates
               </Text>
-              <HStack maxW="320px">
-                <Input {...compressionRates} color="#FFFFFF"/>
-                <Button {...dec} colorScheme="teal" variant="outline">-</Button>
-                <Button {...inc} colorScheme="teal" variant="outline">+</Button>
-              </HStack>
+              {compressionRates === "low" ? (
+                <Button onClick={handleLowRates} mr={4} colorScheme="teal" variant="solid">
+                  Low
+                </Button>
+              ) : (
+                <Button onClick={handleLowRates} mr={4} colorScheme="teal" variant="outline">
+                  Low
+                </Button>
+              )}
+              {compressionRates === "med" ? (
+                <Button onClick={handleMedRates} mr={4} colorScheme="teal" variant="solid">
+                  Medium
+                </Button>
+              ) : (
+                <Button onClick={handleMedRates} mr={4} colorScheme="teal" variant="outline">
+                  Medium
+                </Button>
+              )}
+              {compressionRates === "high" ? (
+                <Button onClick={handleHighRates} mr={4} colorScheme="teal" variant="solid">
+                  High
+                </Button>
+              ) : (
+                <Button onClick={handleHighRates} mr={4} colorScheme="teal" variant="outline">
+                  High
+                </Button>
+              )}
             </Flex>
         </Center>
       </Box>) 
@@ -201,7 +234,8 @@ function App() {
                 h="6vh" 
                 w="15vw" 
                 boxShadow="2xl"
-                fontSize="xl">
+                fontSize="xl"
+                onClick={handlePostQuery}>
                 Compress PNG/JPEG <ArrowRightIcon ml={2} color="black"/></Button>
       </Center>
 
