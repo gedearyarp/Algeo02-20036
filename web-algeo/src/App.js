@@ -32,15 +32,27 @@ import "@fontsource/poppins/200.css"
 
 function App() {
   //BG #282A37 CMPNT #01CC90
+  const config = {
+    styles: {
+      global: () => ({
+        body: {
+          bg: "linear-gradient(90deg, rgba(40,43,56,1) 0%, rgba(51,55,72,1) 77%)",
+          color: "black",
+        },
+        fonts: {
+          heading: "Poppins",
+          body: "Poppins",
+        }
+      }),
+    },
+  }
+  const theme = extendTheme(config);
   const pictureInputRef = useRef();
   const [isUseRateSettings, setIsUseRateSettings] = useState(0);
   const [picture, setPicture] = useState(null);
   const [preview, setPreview] = useState(null);
   const [compressionRates, setCompressionRates] = useState("med");
 
-  const handleUseSettings = () => {
-      isUseRateSettings ? setIsUseRateSettings(0) : setIsUseRateSettings(1);
-  };
   const onChangePicture = e => {
       const file = e.target.files[0];
       if (file && file.type.substr(0, 5) === "image") {
@@ -63,8 +75,29 @@ function App() {
       setPreview(null);
     }
   }, [picture])
-  // console.log('preview: ', preview);
 
+  function handlePostQuery() {
+    var myParams = {
+      data: preview,
+      rates: compressionRates
+    }
+
+    if (true) {
+      axios.post('http://127.0.0.1:5000/compress', myParams)
+          .then(function(response) {
+            console.log(response);
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+    } else {
+      alert("The search query cannot be empty")
+    }
+  }
+
+  const handleUseSettings = () => {
+      isUseRateSettings ? setIsUseRateSettings(0) : setIsUseRateSettings(1);
+  };
   const handleLowRates = () => {
       setCompressionRates("low");
   };
@@ -76,45 +109,12 @@ function App() {
   };
 
 
-  function handlePostQuery() {
-      var myParams = {
-        data: preview,
-        rates: compressionRates
-      }
-  
-      if (true) {
-        axios.post('http://127.0.0.1:5000/compress', myParams)
-            .then(function(response) {
-              console.log(response);
-            })
-            .catch(function(error) {
-              console.log(error);
-            });
-      } else {
-        alert("The search query cannot be empty")
-      }
-  }
 
 
 
 
 
-  // Styling Background
-  const config = {
-    styles: {
-      global: () => ({
-        body: {
-          bg: "linear-gradient(90deg, rgba(40,43,56,1) 0%, rgba(51,55,72,1) 77%)",
-          color: "black",
-        },
-        fonts: {
-          heading: "Poppins",
-          body: "Poppins",
-        }
-      }),
-    },
-  }
-  const theme = extendTheme(config);
+
   return (
     <ChakraProvider theme={theme}>
       <Box overflowX="hidden">
