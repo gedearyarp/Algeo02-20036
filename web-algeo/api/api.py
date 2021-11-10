@@ -1,13 +1,16 @@
 from flask import Flask, request
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 # venv\Scripts\activate
 # python api.py
 @app.route('/compress', methods=['POST', 'GET'])
 def compressImage():
-    # imageURL = request.get_json()
-    # print(imageURL)
-    return "imageURL"
+    imageURL = request.get_json()
+    imageBase64 = imageURL["data"]
+    print(imageBase64)
+    return imageURL
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -50,7 +50,6 @@ function App() {
         setPicture(null);
       }
   };
-  console.log('picture: ', picture);
   
   useEffect(() => {
     if (picture) {
@@ -64,7 +63,7 @@ function App() {
       setPreview(null);
     }
   }, [picture])
-  console.log('preview: ', preview);
+  // console.log('preview: ', preview);
 
   const handleLowRates = () => {
       setCompressionRates("low");
@@ -76,9 +75,10 @@ function App() {
       setCompressionRates("high");
   };
 
+
   function handlePostQuery() {
       var myParams = {
-        data: "halo"
+        data: preview
       }
   
       if (true) {
@@ -95,7 +95,6 @@ function App() {
         alert("The search query cannot be empty")
       }
   }
-
 
 
 
