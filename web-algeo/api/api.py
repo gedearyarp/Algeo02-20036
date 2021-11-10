@@ -34,30 +34,30 @@ def compressImage():
     if(sebelum_img.mode=='RGB'):
         setelah_array=kompresiGambarNLayer(sebelum_array,3,k)
         im = finalisasi(setelah_array)
-        im=base64.b64encode(im)
+        im=base64.encodebytes(base64.b64encode(sebelum_array))
     elif(sebelum_img.mode=='L'):
         setelah_array=kompresiGambarNLayer(sebelum_array,1,k)
         im = finalisasi(setelah_array)
-        im=base64.b64encode(im)
+        im=base64.encodebytes(base64.b64encode(sebelum_array))
     elif(sebelum_img.mode=='RGBA'):
         a=sebelum_array[:,:,3]
         setelah_array=kompresiGambarNLayer(sebelum_array,3,k)
         setelah_array[:,:,3]=a
         setelah_array=pertahankanTransparansi(setelah_array)
         im = finalisasi(setelah_array)
-        im=base64.b64encode(im)
+        im=base64.encodebytes(base64.b64encode(sebelum_array))
     elif(sebelum_img.mode=='LA'):
         a=sebelum_array[:,:,1]
         setelah_array=kompresiGambarNLayer(sebelum_array,1,k)
         setelah_array[:,:,1]=a
         setelah_array=pertahankanTransparansi(setelah_array)
         im = finalisasi(setelah_array)
-        im=base64.b64encode(im)
+        im=base64.encodebytes(base64.b64encode(sebelum_array))
     else:
         try:
             setelah_array=kompresiGambarNLayer(sebelum_array,sebelum_array.shape[2],k)
             im = finalisasi(setelah_array)
-            im=base64.b64encode(im)
+            im=base64.encodebytes(base64.b64encode(sebelum_array))
         except:
             print('Proses gagal !')
             im=''
