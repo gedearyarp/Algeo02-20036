@@ -52,6 +52,7 @@ function App() {
   const [picture, setPicture] = useState(null);
   const [preview, setPreview] = useState(null);
   const [compressionRates, setCompressionRates] = useState("med");
+  const [compressedPicture, setCompressedPicture] = useState("nothing");
 
   const onChangePicture = e => {
       const file = e.target.files[0];
@@ -86,6 +87,7 @@ function App() {
       axios.post('http://127.0.0.1:5000/compress', myParams)
           .then(function(response) {
             console.log(response);
+            setCompressedPicture(response.data);
           })
           .catch(function(error) {
             console.log(error);
@@ -302,15 +304,27 @@ function App() {
               </Text>
             </Center>
             <Center mb="1vw">
-              <Image
-                shadowBox="2xl"
-                boxSize="20vw"
-                objectFit="cover"
-                borderRadius="3px"
-                src={imgDefault}
-                alt="Default Image"
-                mt={5}
-              />
+              {compressedPicture === "nothing" ? (
+                <Image
+                  shadowBox="2xl"
+                  boxSize="20vw"
+                  objectFit="cover"
+                  borderRadius="3px"
+                  src={imgDefault}
+                  alt="Default Image"
+                  mt={5}
+                />
+              ) : (
+                <Image
+                  shadowBox="2xl"
+                  boxSize="20vw"
+                  objectFit="cover"
+                  borderRadius="3px"
+                  src={compressedPicture}
+                  alt="Compressed Image"
+                  mt={5}
+                />
+              )}
             </Center>
             <Box bg="linear-gradient(90deg, rgba(48,226,173,1) 0%, rgba(142,241,212,1) 100%)" width="100%" borderRadius="20px" boxShadow="2xl" py={2} my={5}>
               <Center>

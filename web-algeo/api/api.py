@@ -67,7 +67,7 @@ def compressImage():
     rasio=100*(k*(m+n)+k)/(m*n)
     print(f'Waktu pengerjaan : {lama} detik')
     print(f'Rasio kompresi : {rasio}%')     
-    return "halooo"
+    return str(im)
 
 if __name__ == '__main__':
     app.run(debug=True)
