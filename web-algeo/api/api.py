@@ -24,7 +24,7 @@ def compressImage():
         tingkatKompresi=1
     mulai=perf_counter()
 
-    sebelum_img=Image.open(base64.b64decode(imageBase64))
+    sebelum_img=Image.open(io.BytesIO(base64.b64decode(imageBase64)))
     sebelum_array=array(sebelum_img)
     m=sebelum_array.shape[0]
     n=sebelum_array.shape[1]
