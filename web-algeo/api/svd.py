@@ -1,6 +1,9 @@
 from PIL import Image
-from numpy import array,transpose,matmul,zeros,sqrt,add,dot,diag,uint8,ones,abs,outer
+from numpy import array,transpose,matmul,zeros,sqrt,add,dot,diag,uint8,ones,abs,outer,divide,zeros_like
 from numpy.linalg import norm
+
+def bagiTiapElemen(a,b):
+    return divide(a,b,out=zeros_like(a, dtype=float),where=b!=0)
 
 def eigenDominan(A, toleransi=1e-10):
     m, n = A.shape
@@ -11,12 +14,12 @@ def eigenDominan(A, toleransi=1e-10):
     elif m < n:
         A = matmul(A,transpose(A))
     
-    nilaiEigen = (matmul(A,v)/v)[0]
+    nilaiEigen = bagiTiapElemen((matmul(A,v),v))[0]
 
     while( True):
         Av = matmul(A,v)
         vBaru = Av / norm(Av)
-        nilaiEigenBaru = (matmul(A,vBaru)/vBaru)[0]
+        nilaiEigenBaru = (bagiTiapElemen(matmul(A,vBaru),vBaru))[0]
         if abs(nilaiEigen - nilaiEigenBaru) < toleransi:
             break
 
