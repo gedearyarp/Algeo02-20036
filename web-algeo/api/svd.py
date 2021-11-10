@@ -14,7 +14,7 @@ def eigenDominan(A, toleransi=1e-10):
     elif m < n:
         A = matmul(A,transpose(A))
     
-    nilaiEigen = bagiTiapElemen((matmul(A,v),v))[0]
+    nilaiEigen = bagiTiapElemen(matmul(A,v),v)[0]
 
     while( True):
         Av = matmul(A,v)
