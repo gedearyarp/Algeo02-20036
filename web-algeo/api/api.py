@@ -6,6 +6,7 @@ from numpy import array
 from svd import *
 import io
 import base64
+import re
 
 app = Flask(__name__)
 CORS(app)
@@ -24,8 +25,10 @@ def compressImage():
         tingkatKompresi=1
 
     mulai=perf_counter()
-
-    sebelum_img=Image.open(io.BytesIO(base64.b64decode(imageBase64.split(",",maxsplit=1)[1])))
+    metadata=imageBase64.split(",",maxsplit=1)[0]
+    content=imageBase64.split(",",maxsplit=1)[1]
+    tipe=re.split("[/;]",metadata)[1]
+    sebelum_img=Image.open(io.BytesIO(base64.b64decode(content)))
     sebelum_array=array(sebelum_img)
     m=sebelum_array.shape[0]
     n=sebelum_array.shape[1]
@@ -33,31 +36,26 @@ def compressImage():
     k = 1
     if(sebelum_img.mode=='RGB'):
         setelah_array=kompresiGambarNLayer(sebelum_array,3,k)
-        im = finalisasi(setelah_array)
-        im=base64.encodebytes(base64.b64encode(sebelum_array))
+        im = finalisasi(setelah_array,tipe)
     elif(sebelum_img.mode=='L'):
         setelah_array=kompresiGambarNLayer(sebelum_array,1,k)
-        im = finalisasi(setelah_array)
-        im=base64.encodebytes(base64.b64encode(sebelum_array))
+        im = finalisasi(setelah_array,tipe)
     elif(sebelum_img.mode=='RGBA'):
         a=sebelum_array[:,:,3]
         setelah_array=kompresiGambarNLayer(sebelum_array,3,k)
         setelah_array[:,:,3]=a
         setelah_array=pertahankanTransparansi(setelah_array)
-        im = finalisasi(setelah_array)
-        im=base64.encodebytes(base64.b64encode(sebelum_array))
+        im = finalisasi(setelah_array,tipe)
     elif(sebelum_img.mode=='LA'):
         a=sebelum_array[:,:,1]
         setelah_array=kompresiGambarNLayer(sebelum_array,1,k)
         setelah_array[:,:,1]=a
         setelah_array=pertahankanTransparansi(setelah_array)
-        im = finalisasi(setelah_array)
-        im=base64.encodebytes(base64.b64encode(sebelum_array))
+        im = finalisasi(setelah_array,tipe)
     else:
         try:
             setelah_array=kompresiGambarNLayer(sebelum_array,sebelum_array.shape[2],k)
-            im = finalisasi(setelah_array)
-            im=base64.encodebytes(base64.b64encode(sebelum_array))
+            im = finalisasi(setelah_array,tipe)
         except:
             print('Proses gagal !')
             im=''

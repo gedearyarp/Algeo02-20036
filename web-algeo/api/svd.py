@@ -1,6 +1,8 @@
 from PIL import Image
 from numpy import array,transpose,matmul,zeros,sqrt,add,dot,diag,uint8,ones,abs,outer,divide,zeros_like
 from numpy.linalg import norm
+import base64
+import io
 
 def bagiTiapElemen(a,b):
     return divide(a,b,out=zeros_like(a, dtype=float),where=b!=0)
@@ -77,6 +79,10 @@ def pertahankanTransparansi(arr):
         arr[i,j,:]=[0 for x in range(channel)]
   return arr
 
-def finalisasi(arr):
+def finalisasi(arr,tipe):
   arr=(arr-arr.min())/(arr.max()-arr.min())*255
-  return arr
+  im = Image.fromarray(arr.astype(uint8))
+  buffered = io.BytesIO()
+  im.save(buffered, format=tipe)
+  img_str = base64.b64encode(buffered.getvalue())
+  return img_str.decode('UTF-8')
