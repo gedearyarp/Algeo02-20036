@@ -78,18 +78,17 @@ function App() {
 
   function handlePostQuery() {
       var myParams = {
-        data: preview
+        data: preview,
+        rates: compressionRates
       }
   
       if (true) {
         axios.post('http://127.0.0.1:5000/compress', myParams)
             .then(function(response) {
               console.log(response);
-              //Perform action based on response
             })
             .catch(function(error) {
               console.log(error);
-              //Perform action based on error
             });
       } else {
         alert("The search query cannot be empty")

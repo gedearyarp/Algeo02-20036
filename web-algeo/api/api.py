@@ -9,7 +9,7 @@ CORS(app)
 def compressImage():
     imageURL = request.get_json()
     imageBase64 = imageURL["data"]
-    print(imageBase64)
+    compressionRates = imageURL["rates"]
     return imageURL
 
 if __name__ == '__main__':
