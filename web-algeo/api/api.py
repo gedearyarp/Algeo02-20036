@@ -1,6 +1,6 @@
 from flask import Flask, request
 from flask_cors import CORS
-from time import clock
+from time import perf_counter
 from PIL import Image
 from numpy import array
 from svd import *
@@ -22,7 +22,7 @@ def compressImage():
         tingkatKompresi=2
     else:
         tingkatKompresi=1
-    mulai=clock()
+    mulai=perf_counter()
 
     sebelum_img=Image.open(base64.b64decode(imageBase64))
     sebelum_array=array(sebelum_img)
@@ -61,11 +61,11 @@ def compressImage():
             print('Proses gagal !')
             im=''
 
-    selesai=clock()
+    selesai=perf_counter()
     lama=selesai-mulai
     rasio=100*(k*(m+n)+k)/(m*n)
     print(f'Waktu pengerjaan : {lama} detik')
-    print(f'Rasio kompresi : {rasio}%')
+    print(f'Rasio kompresi : {rasio}%')     
     return im,lama,rasio
 
 if __name__ == '__main__':
