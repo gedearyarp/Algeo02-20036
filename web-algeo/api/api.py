@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 from time import perf_counter
 from PIL import Image
@@ -22,14 +22,15 @@ def compressImage():
         tingkatKompresi=2
     else:
         tingkatKompresi=1
+
     mulai=perf_counter()
 
-    sebelum_img=Image.open(io.BytesIO(base64.b64decode(imageBase64)))
+    sebelum_img=Image.open(io.BytesIO(base64.b64decode(imageBase64.split(",",maxsplit=1)[1])))
     sebelum_array=array(sebelum_img)
     m=sebelum_array.shape[0]
     n=sebelum_array.shape[1]
     banyakEigen = min(m,n)
-    k = banyakEigen//(tingkatKompresi*3)
+    k = 1
     if(sebelum_img.mode=='RGB'):
         setelah_array=kompresiGambarNLayer(sebelum_array,3,k)
         im = finalisasi(setelah_array)
@@ -66,7 +67,7 @@ def compressImage():
     rasio=100*(k*(m+n)+k)/(m*n)
     print(f'Waktu pengerjaan : {lama} detik')
     print(f'Rasio kompresi : {rasio}%')     
-    return im,lama,rasio
+    return "halooo"
 
 if __name__ == '__main__':
     app.run(debug=True)
