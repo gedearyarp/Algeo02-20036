@@ -62,10 +62,20 @@ def compressImage():
 
     selesai=perf_counter()
     lama=selesai-mulai
+    lamaWaktu = "{:.2f}".format(lama)
     rasio=100*(k*(m+n)+k)/(m*n)
-    print(f'Waktu pengerjaan : {lama} detik')
-    print(f'Rasio kompresi : {rasio}%')     
-    return str(im)
+    rasioGambar="{:.2f}".format(rasio)
+    print(f'Waktu pengerjaan : {lamaWaktu} detik')
+    print(f'Rasio kompresi : {rasioGambar}%') 
+    im = str(im)
+    sizeCompres = (len(im) * 3) / 4 - im.count('=', -2)
+    im = str(metadata)+','+str(im)    
+    return jsonify(
+        gambarKompres=str(im),
+        waktuKompres=str(lamaWaktu),
+        rasioKompres=str(rasioGambar), 
+        sizeKompres=str(sizeCompres)
+    )
 
 if __name__ == '__main__':
     app.run(debug=True)

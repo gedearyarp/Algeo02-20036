@@ -1,11 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
+import "./App.css"
 import imgDefault from "./images/imgDefault.jpg"
 import uploadBigArrow from "./images/uploadBigArrow.png"
 import logoPNG from "./images/logopng.png"
 import { Copyright } from './misc/Copyright'
 import { SocialMediaLinks } from './misc/SocialMediaLinks'
 import axios from "axios"
-
+import swal from 'sweetalert';
 import {
   ChakraProvider,
   Box,
@@ -19,12 +20,17 @@ import {
   Image,
   Stack,
   StackDivider,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
 } from '@chakra-ui/react';
 import { 
   ChevronDownIcon,
   ChevronRightIcon,
   SettingsIcon,
-  ArrowRightIcon
+  ArrowRightIcon,
+  DownloadIcon,
 } from '@chakra-ui/icons'
 import "@fontsource/poppins/600.css"
 import "@fontsource/poppins/400.css"
@@ -53,6 +59,9 @@ function App() {
   const [preview, setPreview] = useState(null);
   const [compressionRates, setCompressionRates] = useState("med");
   const [compressedPicture, setCompressedPicture] = useState("nothing");
+  const [timeUsed, setTimeUsed] = useState(0);
+  const [ratioRates, setRatioRates] = useState(0);
+  const [sizeCompressed, setSizeCompressed] = useState(0);
 
   const onChangePicture = e => {
       const file = e.target.files[0];
@@ -83,17 +92,20 @@ function App() {
       rates: compressionRates
     }
 
-    if (true) {
+    if (picture) {
       axios.post('http://127.0.0.1:5000/compress', myParams)
           .then(function(response) {
             console.log(response);
-            setCompressedPicture(response.data);
+            setCompressedPicture(response.data.gambarKompres);
+            setRatioRates(response.data.rasioKompres);
+            setTimeUsed(response.data.waktuKompres);
+            setSizeCompressed(response.data.sizeKompres);
           })
           .catch(function(error) {
             console.log(error);
           });
     } else {
-      alert("The search query cannot be empty")
+      swal("Picture Not Found!", "Seems like you didn't select the picture", "error");
     }
   }
 
@@ -109,7 +121,7 @@ function App() {
   const handleHighRates = () => {
       setCompressionRates("high");
   };
-
+  console.log(picture);
 
 
 
@@ -138,13 +150,13 @@ function App() {
           <Button onClick={(event) => {
             event.preventDefault();
             pictureInputRef.current.click();
-          }} color="#01CC90" borderStyle="dotted" borderWidth={5} borderColor="#01CC90" width="30vw" height="15vh" boxShadow="xl">
+          }} color="#01CC90" borderStyle="dotted" borderWidth={5} borderColor="#01CC90" width="45vw" height="25vh" boxShadow="xl">
             <Flex width="100%">
               <Spacer/>
               <Box>
                 { preview ? (
                   <Image
-                    boxSize="4vw"
+                    boxSize="8vw"
                     objectFit="cover"
                     borderRadius="3px"
                     src={preview}
@@ -153,7 +165,7 @@ function App() {
                   />
                 ) : (
                   <Image
-                    boxSize="4vw"
+                    boxSize="8vw"
                     objectFit="cover"
                     borderRadius="3px"
                     src={uploadBigArrow}
@@ -164,94 +176,104 @@ function App() {
               </Box>
               <Spacer/>
               <Box>
-                <Text fontSize="4xl" color="#FFFFFF">Click here to <span style={{ color: "#8ef1d4" }}>select</span></Text>
-                <Text color="#FFFFFF" fontSize="xl" textAlign="left">or <span style={{ color: "#8ef1d4" }}>change</span> your image.</Text>
+                <Text fontSize="5xl" color="#FFFFFF">Click here to <span style={{ color: "#8ef1d4" }}>select</span></Text>
+                <Text color="#FFFFFF" fontSize="2xl" textAlign="left">or <span style={{ color: "#8ef1d4" }}>change</span> your image.</Text>
               </Box>
               <Spacer/>
             </Flex>
           </Button>
         </Center>
       </Box>
-
-      <Box mt ={5} >
-        <Center>
-          <Button onClick={handleUseSettings}>
-          {isUseRateSettings ?
-          (<Text color="#FFFFFF" fontSize="xl" fontFamily="poppins" fontWeight={200}>
-            <SettingsIcon mr={5}/>  
-            Additional settings <ChevronDownIcon/>
-          </Text>) :
-          (<Text color="#FFFFFF" fontSize="xl" fontFamily="poppins" fontWeight={200}>
-            <SettingsIcon mr={5}/>  
-            Additional settings <ChevronRightIcon/>
-          </Text>)}
-          </Button>
-        </Center>
-      </Box>
-
-      {isUseRateSettings ?
-      (<Box mt = {5}>
-        <Center>
-            <Flex>
-              <Text color="#8ef1d4" fontSize="xl" fontFamily="poppins" mr={4} fontWeight={400}>
-                Compression rates
-              </Text>
-              {compressionRates === "low" ? (
-                <Button onClick={handleLowRates} mr={4} colorScheme="teal" variant="solid">
-                  Low
+      
+      <Center>
+        <Box w="45vw">
+          <Flex>
+            <Box>
+              <Box mt ={5} >
+                <Button onClick={handleUseSettings}>
+                  {isUseRateSettings ?
+                  (<Text color="#FFFFFF" fontSize="xl" fontFamily="poppins" fontWeight={200}>
+                    <SettingsIcon mr={5}/>  
+                    Additional settings <ChevronDownIcon/>
+                  </Text>) :
+                  (<Text color="#FFFFFF" fontSize="xl" fontFamily="poppins" fontWeight={200}>
+                    <SettingsIcon mr={5}/>  
+                    Additional settings <ChevronRightIcon/>
+                  </Text>)}
                 </Button>
-              ) : (
-                <Button onClick={handleLowRates} mr={4} colorScheme="teal" variant="outline">
-                  Low
-                </Button>
-              )}
-              {compressionRates === "med" ? (
-                <Button onClick={handleMedRates} mr={4} colorScheme="teal" variant="solid">
-                  Medium
-                </Button>
-              ) : (
-                <Button onClick={handleMedRates} mr={4} colorScheme="teal" variant="outline">
-                  Medium
-                </Button>
-              )}
-              {compressionRates === "high" ? (
-                <Button onClick={handleHighRates} mr={4} colorScheme="teal" variant="solid">
-                  High
-                </Button>
-              ) : (
-                <Button onClick={handleHighRates} mr={4} colorScheme="teal" variant="outline">
-                  High
-                </Button>
-              )}
-            </Flex>
-        </Center>
-      </Box>) 
-      : null}
-
-      <Center mt ={10}>
-        <Button bg="linear-gradient(90deg, rgba(48,226,173,1) 0%, rgba(142,241,212,1) 100%)" 
-                color="#282A37" 
-                h="6vh" 
-                w="15vw" 
-                boxShadow="2xl"
-                fontSize="xl"
-                onClick={handlePostQuery}>
-                Compress PNG/JPEG <ArrowRightIcon ml={2} color="black"/></Button>
+              </Box>
+              {isUseRateSettings ? (
+                <Box mt = {5}>
+                  <Center>
+                      <Flex>
+                        <Text color="#8ef1d4" fontSize="xl" fontFamily="poppins" mr={4} fontWeight={400}>
+                          Compression rates
+                        </Text>
+                        {compressionRates === "low" ? (
+                          <Button onClick={handleLowRates} mr={4} colorScheme="teal" variant="solid">
+                            Low
+                          </Button>
+                        ) : (
+                          <Button onClick={handleLowRates} mr={4} colorScheme="teal" variant="outline">
+                            Low
+                          </Button>
+                        )}
+                        {compressionRates === "med" ? (
+                          <Button onClick={handleMedRates} mr={4} colorScheme="teal" variant="solid">
+                            Medium
+                          </Button>
+                        ) : (
+                          <Button onClick={handleMedRates} mr={4} colorScheme="teal" variant="outline">
+                            Medium
+                          </Button>
+                        )}
+                        {compressionRates === "high" ? (
+                          <Button onClick={handleHighRates} mr={4} colorScheme="teal" variant="solid">
+                            High
+                          </Button>
+                        ) : (
+                          <Button onClick={handleHighRates} mr={4} colorScheme="teal" variant="outline">
+                            High
+                          </Button>
+                        )}
+                      </Flex>
+                  </Center>
+                </Box>
+              ) : null}
+            </Box>
+            <Spacer />
+            <Box>
+              <Center mt ={5}>
+                <Button bg="linear-gradient(90deg, rgba(48,226,173,1) 0%, rgba(142,241,212,1) 100%)" 
+                        color="#282A37" 
+                        h="6vh" 
+                        w="15vw" 
+                        boxShadow="2xl"
+                        fontSize="xl"
+                        onClick={handlePostQuery}>
+                        Compress PNG/JPEG <ArrowRightIcon ml={2} color="black"/></Button>
+              </Center>
+            </Box>
+          </Flex>
+        </Box>
       </Center>
 
-      <Box mt={10}>
+
+
+
+      <Box mt={10} >
         <Center>
-          <Box bg="linear-gradient(90deg, rgba(48,226,173,1) 0%, rgba(142,241,212,1) 100%)" width="24vw" borderRadius="20px" boxShadow="2xl" py={2}>
-            <Center>
-            <Text color="black" fontSize="2xl" fontFamily="poppins" fontWeight={600}>
-              Successfully Compressed!
-            </Text>
-            </Center>
-            <Center>
-            <Text color="black" fontSize="xl" fontFamily="poppins">
-              0.5 seconds compression time
-            </Text>
-            </Center>
+          <Box w="40vw" borderRadius="10px">
+            <Alert py="15px" borderRadius="10px" status="success" bg="linear-gradient(90deg, rgba(48,226,173,1) 0%, rgba(142,241,212,1) 100%)">
+              <AlertIcon color="#121633" boxSize="40px" mr={5} ml={2}/>
+              <Box flex="1">
+                <AlertTitle fontSize="3xl">Successfully Compressed!</AlertTitle>
+                <AlertDescription display="block" fontSize="xl" mt={5}>
+                  Your image has been compressed in <span style={{ fontWeight: "bold" }}>{timeUsed}</span> seconds
+                  and reduced by <span style={{ fontWeight: "bold" }}>{ratioRates}%</span>
+                </AlertDescription>
+              </Box>
+            </Alert>
           </Box>
         </Center>
       </Box>
@@ -267,33 +289,57 @@ function App() {
               </Text>
             </Center>
             <Center mb="1vw">
-              <Image
-                shadowBox="2xl"
-                boxSize="20vw"
-                objectFit="cover"
-                borderRadius="3px"
-                src={imgDefault}
-                alt="Default Image"
-                mt={5}
-              />
+              {compressedPicture === "nothing" ? (
+                <Image
+                  shadowBox="2xl"
+                  boxSize="20vw"
+                  objectFit="cover"
+                  borderRadius="3px"
+                  src={imgDefault}
+                  alt="Default Image"
+                  mt={5}
+                />
+              ) : (
+                <Image
+                  shadowBox="2xl"
+                  boxSize="20vw"
+                  objectFit="cover"
+                  borderRadius="3px"
+                  src={preview}
+                  alt="Compressed Image"
+                  mt={5}
+                />
+              )}
             </Center>
             <Flex>
-              <Text color="#FFFFFF" fontSize="2xl" fontFamily="poppins" mr={4} fontWeight="200">
+              <Text color="#FFFFFF" fontSize="2xl" fontFamily="poppins" mr={4} fontWeight="200" w="100%">
                 Image Name
               </Text>
               <Spacer />
-              <Text color="#01CC90" fontSize="2xl" fontFamily="poppins" mr={4}>
-                testImage.jpg
-              </Text>
+              {picture ? (
+                <Text color="#01CC90" fontSize="2xl" fontFamily="poppins" mr={4} isTruncated>
+                  {picture.name}
+                </Text>
+              ) : (
+                <Text color="#01CC90" fontSize="2xl" fontFamily="poppins" mr={4}>
+                  Test.jpg
+                </Text>
+              )}
             </Flex>
-            <Flex>
+            <Flex mt={1.5}>
               <Text color="#FFFFFF" fontSize="2xl" fontFamily="poppins" mr={4} fontWeight="200">
                 Image Size
               </Text>
               <Spacer />
-              <Text color="#01CC90" fontSize="2xl" fontFamily="poppins" mr={4}>
-                356.7Kb
-              </Text>
+              {picture ? (
+                <Text color="#01CC90" fontSize="2xl" fontFamily="poppins" mr={4} >
+                  {Math.floor(picture.size/1000)} Kb
+                </Text>
+              ) : (
+                <Text color="#01CC90" fontSize="2xl" fontFamily="poppins" mr={4}>
+                  Test Kb
+                </Text>
+              )}
             </Flex>
           </Box>
           <Spacer />
@@ -328,9 +374,9 @@ function App() {
             </Center>
             <Box bg="linear-gradient(90deg, rgba(48,226,173,1) 0%, rgba(142,241,212,1) 100%)" width="100%" borderRadius="20px" boxShadow="2xl" py={2} my={5}>
               <Center>
-              <Text color="black" fontSize="2xl" fontFamily="poppins" fontWeight={600}>
-                Download Image
-              </Text>
+                <Text color="black" fontSize="2xl" fontFamily="poppins" fontWeight={600}>
+                  <DownloadIcon mr={5}/> Download Image
+                </Text>
               </Center>
             </Box>
             <Flex>
@@ -338,9 +384,15 @@ function App() {
                 Image Size
               </Text>
               <Spacer />
-              <Text color="#01CC90" fontSize="2xl" fontFamily="poppins" mr={4}>
-                116.1Kb
-              </Text>
+              {compressedPicture ? (
+                <Text color="#01CC90" fontSize="2xl" fontFamily="poppins" mr={4}>
+                  {Math.floor(sizeCompressed/1000)} Kb
+                </Text>
+              ) : (
+                <Text color="#01CC90" fontSize="2xl" fontFamily="poppins" mr={4}>
+                  TestKompres Kb
+                </Text>
+              )}
             </Flex>
           </Box>
           <Spacer />
