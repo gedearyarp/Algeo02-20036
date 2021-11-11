@@ -121,7 +121,7 @@ function App() {
   const handleHighRates = () => {
       setCompressionRates("high");
   };
-  console.log(picture);
+  console.log(compressedPicture);
 
 
 
@@ -264,11 +264,11 @@ function App() {
       <Box mt={10} >
         <Center>
           <Box w="40vw" borderRadius="10px">
-            <Alert py="15px" borderRadius="10px" status="success" bg="linear-gradient(90deg, rgba(48,226,173,1) 0%, rgba(142,241,212,1) 100%)">
+            <Alert py="20px" borderRadius="10px" status="success" bg="linear-gradient(90deg, rgba(48,226,173,1) 0%, rgba(142,241,212,1) 100%)">
               <AlertIcon color="#121633" boxSize="40px" mr={5} ml={2}/>
               <Box flex="1">
                 <AlertTitle fontSize="3xl">Successfully Compressed!</AlertTitle>
-                <AlertDescription display="block" fontSize="xl" mt={5}>
+                <AlertDescription display="block" fontSize="xl" mt={3}>
                   Your image has been compressed in <span style={{ fontWeight: "bold" }}>{timeUsed}</span> seconds
                   and reduced by <span style={{ fontWeight: "bold" }}>{ratioRates}%</span>
                 </AlertDescription>
@@ -372,13 +372,15 @@ function App() {
                 />
               )}
             </Center>
-            <Box bg="linear-gradient(90deg, rgba(48,226,173,1) 0%, rgba(142,241,212,1) 100%)" width="100%" borderRadius="20px" boxShadow="2xl" py={2} my={5}>
+            <a href={compressedPicture} download>
+            <Button download h="50px" bg="linear-gradient(90deg, rgba(48,226,173,1) 0%, rgba(142,241,212,1) 100%)" width="100%" borderRadius="10px" boxShadow="2xl" py={2} mb={3}>
               <Center>
                 <Text color="black" fontSize="2xl" fontFamily="poppins" fontWeight={600}>
                   <DownloadIcon mr={5}/> Download Image
                 </Text>
               </Center>
-            </Box>
+            </Button>
+            </a>
             <Flex>
               <Text color="#FFFFFF" fontSize="2xl" fontFamily="poppins" mr={4} fontWeight="200">
                 Image Size
