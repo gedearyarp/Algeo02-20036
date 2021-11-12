@@ -7,7 +7,7 @@ import io
 def bagiTiapElemen(a,b):
     return divide(a,b,out=zeros_like(a, dtype=float),where=b!=0)
 
-def eigenDominan(A, toleransi=1e-10):
+def eigenDominan(A, toleransi):
     m, n = A.shape
     k=min(m,n)
     v = ones(k) / sqrt(k)
@@ -73,10 +73,11 @@ def kompresiGambarNLayer(arr,n,k):
 
 def pertahankanTransparansi(arr):
   channel=arr.shape[2]
+  layerTrpPixel = [0 for x in range(channel)]
   for i in range(arr.shape[0]):
     for j in range(arr.shape[1]):
       if arr[i,j,-1]==0:
-        arr[i,j,:]=[0 for x in range(channel)]
+        arr[i,j,:] = layerTrpPixel
   return arr
 
 def finalisasi(arr,tipe):

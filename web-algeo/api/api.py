@@ -18,12 +18,11 @@ def compressImage():
     imageBase64 = imageURL["data"]
     compressionRates = imageURL["rates"]
     if(compressionRates=='low'):
-        tingkatKompresi=3
+        compressRate = 3
     elif(compressionRates=='med'):
-        tingkatKompresi=2
+        compressRate = 2
     else:
-        tingkatKompresi=1
-
+        compressRate = 1
     mulai=perf_counter()
     metadata=imageBase64.split(",",maxsplit=1)[0]
     content=imageBase64.split(",",maxsplit=1)[1]
@@ -32,8 +31,8 @@ def compressImage():
     sebelum_array=array(sebelum_img)
     m=sebelum_array.shape[0]
     n=sebelum_array.shape[1]
-    banyakEigen = min(m,n)
-    k = 20
+    k = min(m,n)//(3*compressRate)
+    print(k)
     if(sebelum_img.mode=='RGB'):
         setelah_array=kompresiGambarNLayer(sebelum_array,3,k)
         print(1)
