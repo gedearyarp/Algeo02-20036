@@ -62,9 +62,11 @@ function App() {
   const [timeUsed, setTimeUsed] = useState(0);
   const [ratioRates, setRatioRates] = useState(0);
   const [sizeCompressed, setSizeCompressed] = useState(0);
+  const [succed, setSucced] = useState("nodata");
 
   const onChangePicture = e => {
       const file = e.target.files[0];
+      setSucced("nodata");
       if (file && file.type.substr(0, 5) === "image") {
         setPicture(file);
       }
@@ -100,6 +102,7 @@ function App() {
             setRatioRates(response.data.rasioKompres);
             setTimeUsed(response.data.waktuKompres);
             setSizeCompressed(response.data.sizeKompres);
+            setSucced(response.data.berhasilKompres);
           })
           .catch(function(error) {
             console.log(error);
@@ -259,26 +262,44 @@ function App() {
       </Center>
 
 
+      {succed ==="yess" ? (
+        <Box mt={10} >
+          <Center>
+            <Box w="40vw" borderRadius="10px">
+              <Alert py="20px" borderRadius="10px" status="success" bg="linear-gradient(90deg, rgba(48,226,173,1) 0%, rgba(142,241,212,1) 100%)">
+                <AlertIcon color="#121633" boxSize="40px" mr={5} ml={2}/>
+                <Box flex="1">
+                  <AlertTitle fontSize="3xl">Successfully Compressed!</AlertTitle>
+                  <AlertDescription display="block" fontSize="xl" mt={3}>
+                    Your image has been compressed in <span style={{ fontWeight: "bold" }}>{timeUsed}</span> seconds
+                    and reduced by <span style={{ fontWeight: "bold" }}>{ratioRates}%</span>
+                  </AlertDescription>
+                </Box>
+              </Alert>
+            </Box>
+          </Center>
+        </Box>
+      ) : null}
 
+      {succed ==="noo" ? (
+        <Box mt={10} >
+          <Center>
+            <Box w="40vw" borderRadius="10px">
+              <Alert py="20px" borderRadius="10px" status="error" bg="linear-gradient(90deg, rgba(253,29,29,1) 0%, rgba(252,124,69,1) 100%)">
+                <AlertIcon color="#121633" boxSize="40px" mr={5} ml={2}/>
+                <Box flex="1">
+                  <AlertTitle fontSize="3xl">Failed to compress!</AlertTitle>
+                  <AlertDescription display="block" fontSize="xl" mt={3}>
+                    An error occured while we're compressing your image
+                  </AlertDescription>
+                </Box>
+              </Alert>
+            </Box>
+          </Center>
+        </Box>
+      ) : null}
 
-      <Box mt={10} >
-        <Center>
-          <Box w="40vw" borderRadius="10px">
-            <Alert py="20px" borderRadius="10px" status="success" bg="linear-gradient(90deg, rgba(48,226,173,1) 0%, rgba(142,241,212,1) 100%)">
-              <AlertIcon color="#121633" boxSize="40px" mr={5} ml={2}/>
-              <Box flex="1">
-                <AlertTitle fontSize="3xl">Successfully Compressed!</AlertTitle>
-                <AlertDescription display="block" fontSize="xl" mt={3}>
-                  Your image has been compressed in <span style={{ fontWeight: "bold" }}>{timeUsed}</span> seconds
-                  and reduced by <span style={{ fontWeight: "bold" }}>{ratioRates}%</span>
-                </AlertDescription>
-              </Box>
-            </Alert>
-          </Box>
-        </Center>
-      </Box>
-
-
+      {succed === "yess" ? (
       <Box mt = {10}>
         <Flex>
           <Spacer />
@@ -400,6 +421,7 @@ function App() {
           <Spacer />
         </Flex>
       </Box>
+      ) : null }
 
       {/* <Box mt={10} bg="#121633" width="100%" height="10vw"> */}
       <Box
