@@ -1,3 +1,4 @@
+from re import A
 from PIL import Image
 from numpy import array,transpose,matmul,zeros,sqrt,add,dot,diag,uint8,ones,abs,outer,divide,zeros_like
 from numpy.linalg import norm
@@ -17,12 +18,13 @@ def eigenDominan(A, toleransi):
         A = matmul(A,transpose(A))
     
     nilaiEigen = bagiTiapElemen(matmul(A,v),v)[0]
-
+    jumlahIterasi=0
     while( True):
         Av = matmul(A,v)
         vBaru = Av / norm(Av)
         nilaiEigenBaru = (bagiTiapElemen(matmul(A,vBaru),vBaru))[0]
-        if abs(nilaiEigen - nilaiEigenBaru) < toleransi:
+        jumlahIterasi+=1
+        if ((abs(nilaiEigen - nilaiEigenBaru) < toleransi) or (jumlahIterasi>=10000)):
             break
 
         v = vBaru
@@ -67,8 +69,11 @@ def kompresiSVD(arr,k):
 
 def kompresiGambarNLayer(arr,n,k):
   hasil=zeros(arr.shape)
-  for i in range(n):
-    hasil[:,:,i]=kompresiSVD(arr[:,:,i],k)
+  if(n==1):
+    hasil=kompresiSVD(arr,k)
+  else:
+    for i in range(n):
+      hasil[:,:,i]=kompresiSVD(arr[:,:,i],k)
   return hasil
 
 def pertahankanTransparansi(arr):

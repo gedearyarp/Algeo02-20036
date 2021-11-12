@@ -17,12 +17,6 @@ def compressImage():
     imageURL = request.get_json()
     imageBase64 = imageURL["data"]
     compressionRates = imageURL["rates"]
-    if(compressionRates=='low'):
-        compressRate = 3
-    elif(compressionRates=='med'):
-        compressRate = 2
-    else:
-        compressRate = 1
     mulai=perf_counter()
     metadata=imageBase64.split(",",maxsplit=1)[0]
     content=imageBase64.split(",",maxsplit=1)[1]
@@ -31,7 +25,22 @@ def compressImage():
     sebelum_array=array(sebelum_img)
     m=sebelum_array.shape[0]
     n=sebelum_array.shape[1]
-    k = min(m,n)//(3*compressRate)
+    #Prasyarat ukuran gambar lebih dari 9 x 9 pixel
+    if(min(m,n)>=50):
+        if(compressionRates=='low'):
+            k = 10
+        elif(compressionRates=='med'):
+            k = 15
+        else:
+            k = 20
+    else:
+        if(compressionRates=='low'):
+            compressRate = 3
+        elif(compressionRates=='med'):
+            compressRate = 2
+        else:
+            compressRate = 1
+        k = min(m,n)//(3*compressRate)
     print(k)
     if(sebelum_img.mode=='RGB'):
         setelah_array=kompresiGambarNLayer(sebelum_array,3,k)
@@ -55,9 +64,30 @@ def compressImage():
         setelah_array=pertahankanTransparansi(setelah_array)
         print(4)
         im = finalisasi(setelah_array,tipe)
+    elif(sebelum_img.mode=='P'):
+        kodeTransparan=sebelum_img.info.get("transparency", None)
+        if(kodeTransparan !=None):
+            sebelum_img=sebelum_img.convert('RGBA')
+            setelah_array=array(sebelum_img)
+            for i in range(m):
+                for j in range(n):
+                    if(sebelum_array[i,j]==kodeTransparan):
+                        setelah_array[i,j,:]=[0,0,0,0]
+            setelah_array=kompresiGambarNLayer(setelah_array,3,k)
+            setelah_array=pertahankanTransparansi(setelah_array)
+        else:
+            sebelum_img=sebelum_img.convert('RGB')
+            setelah_array=kompresiGambarNLayer(sebelum_array,3,k)
+        im = finalisasi(setelah_array,tipe)
+    elif(sebelum_img.mode=='PA'):
+        a=sebelum_array[:,:,1]
+        setelah_array=kompresiGambarNLayer(sebelum_array,1,k)
+        setelah_array[:,:,1]=a
+        setelah_array=pertahankanTransparansi(setelah_array)
+        im = finalisasi(setelah_array,tipe)
     else:
         try:
-            setelah_array=kompresiGambarNLayer(sebelum_array,sebelum_array.shape[2],k)
+            setelah_array=kompresiGambarNLayer(sebelum_array,(1 if len(sebelum_array.shape)==2 else sebelum_array.shape[2]),k)
             print(5)
             im = finalisasi(setelah_array,tipe)
         except:
