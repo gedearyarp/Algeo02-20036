@@ -66,8 +66,8 @@ function App() {
 
   const onChangePicture = e => {
       const file = e.target.files[0];
-      setSucced("nodata");
       if (file && file.type.substr(0, 5) === "image") {
+        setSucced("nodata");
         setPicture(file);
       }
       else {
