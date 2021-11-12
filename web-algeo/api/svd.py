@@ -30,7 +30,7 @@ def eigenDominan(A, toleransi=1e-10):
 
     return nilaiEigenBaru, vBaru
 
-def svd(A, k=None, toleransi=0.001):
+def svd(A, k=None, toleransi=1):
     A = array(A, dtype=float)
     m, n = A.shape
         

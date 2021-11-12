@@ -33,7 +33,7 @@ def compressImage():
     m=sebelum_array.shape[0]
     n=sebelum_array.shape[1]
     banyakEigen = min(m,n)
-    k = 10
+    k = 20
     if(sebelum_img.mode=='RGB'):
         setelah_array=kompresiGambarNLayer(sebelum_array,3,k)
         print(1)
