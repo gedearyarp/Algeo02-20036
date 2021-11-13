@@ -41,39 +41,34 @@ def compressImage():
         else:
             compressRate = 1
         k = min(m,n)//(3*compressRate)
-    print(k)
+    print("Banyaknya singular values yang digunakan: ",k)
+    print("Mode gambar: ",sebelum_img.mode)
     if(sebelum_img.mode=='RGB'):
         setelah_array=kompresiGambarNLayer(sebelum_array,3,k)
-        print(1)
         im = finalisasi(setelah_array,tipe)
     elif(sebelum_img.mode=='L'):
         setelah_array=kompresiGambarNLayer(sebelum_array,1,k)
-        print(2)
         im = finalisasi(setelah_array,tipe)
     elif(sebelum_img.mode=='RGBA'):
         a=sebelum_array[:,:,3]
         setelah_array=kompresiGambarNLayer(sebelum_array,3,k)
         setelah_array[:,:,3]=a
         setelah_array=pertahankanTransparansi(setelah_array)
-        print(3)
         im = finalisasi(setelah_array,tipe)
     elif(sebelum_img.mode=='LA'):
         a=sebelum_array[:,:,1]
         setelah_array=kompresiGambarNLayer(sebelum_array,1,k)
         setelah_array[:,:,1]=a
         setelah_array=pertahankanTransparansi(setelah_array)
-        print(4)
         im = finalisasi(setelah_array,tipe)
     elif(sebelum_img.mode=='P'):
         kodeTransparan=sebelum_img.info.get("transparency", None)
         if(kodeTransparan !=None):
             sebelum_img=sebelum_img.convert('RGBA')
             setelah_array=array(sebelum_img)
-            for i in range(m):
-                for j in range(n):
-                    if(sebelum_array[i,j]==kodeTransparan):
-                        setelah_array[i,j,:]=[0,0,0,0]
-            setelah_array=kompresiGambarNLayer(setelah_array,3,k)
+            a=setelah_array[:,:,3]
+            setelah_array=kompresiGambarNLayer(setelah_array,1,k)
+            setelah_array[:,:,3]=a
             setelah_array=pertahankanTransparansi(setelah_array)
         else:
             sebelum_img=sebelum_img.convert('RGB')

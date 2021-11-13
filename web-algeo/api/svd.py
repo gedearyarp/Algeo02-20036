@@ -25,6 +25,7 @@ def eigenDominan(A, toleransi):
         nilaiEigenBaru = (bagiTiapElemen(matmul(A,vBaru),vBaru))[0]
         jumlahIterasi+=1
         if ((abs(nilaiEigen - nilaiEigenBaru) < toleransi) or (jumlahIterasi>=10000)):
+            print("dilakukan ",jumlahIterasi," kali iterasi")
             break
 
         v = vBaru
@@ -41,6 +42,7 @@ def svd(A, k=None, toleransi=1):
         k = min(m, n)
 
     for i in range(k):
+        print("Proses pencarian singular value ke-",i+1)
         salinanA = A.copy()
 
         for u, nilaiSingular, v in SVDKeN[:i]:
@@ -73,6 +75,7 @@ def kompresiGambarNLayer(arr,n,k):
     hasil=kompresiSVD(arr,k)
   else:
     for i in range(n):
+      print("Mengolah layer ke-",i+1)
       hasil[:,:,i]=kompresiSVD(arr[:,:,i],k)
   return hasil
 
