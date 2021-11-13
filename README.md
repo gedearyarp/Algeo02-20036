@@ -49,17 +49,25 @@ Proceed to describe how to install / setup one's local environment / get started
 
 ## Usage
 Activate the back-end by doing this
-`cd web-algeo
-cd api
-venv\Scripts\activate
-pip install -r requirements.txt
-python api.py`
+
+`cd web-algeo`
+
+`cd api`
+
+`venv\Scripts\activate`
+
+`pip install -r requirements.txt`
+
+`python api.py`
 
 and then run the front-end by doing this (make sure you already have Node js, if you don't have yet please install it from this link https://nodejs.org/en/)
-`cd web-algeo
-npm install
-npm run start
-`
+
+`cd web-algeo`
+
+`npm install`
+
+`npm run start`
+
 
 ## Project Status
 Project is: _complete_ 
