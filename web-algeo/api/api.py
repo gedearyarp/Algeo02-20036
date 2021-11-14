@@ -67,11 +67,12 @@ def compressImage():
             sebelum_img=sebelum_img.convert('RGBA')
             setelah_array=array(sebelum_img)
             a=setelah_array[:,:,3]
-            setelah_array=kompresiGambarNLayer(setelah_array,1,k)
+            setelah_array=kompresiGambarNLayer(setelah_array,3,k)
             setelah_array[:,:,3]=a
             setelah_array=pertahankanTransparansi(setelah_array)
         else:
             sebelum_img=sebelum_img.convert('RGB')
+            sebelum_array=array(sebelum_img)
             setelah_array=kompresiGambarNLayer(sebelum_array,3,k)
         im = finalisasi(setelah_array,tipe)
     elif(sebelum_img.mode=='PA'):
