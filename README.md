@@ -25,9 +25,8 @@
 
 
 ## Technologies Used
-- Tech 1 - version 1.0
-- Tech 2 - version 2.0
-- Tech 3 - version 3.0
+- React js
+- Flask
 
 
 ## Features
@@ -49,15 +48,29 @@ Proceed to describe how to install / setup one's local environment / get started
 
 
 ## Usage
-How does one go about using it?
-Provide various use cases and code examples here.
+Activate the back-end by doing this
 
-`write-your-code-here`
+`cd web-algeo`
+
+`cd api`
+
+`venv\Scripts\activate`
+
+`pip install -r requirements.txt`
+
+`python api.py`
+
+and then run the front-end by doing this (make sure you already have Node js, if you don't have yet please install it from this link https://nodejs.org/en/)
+
+`cd web-algeo`
+
+`npm install`
+
+`npm run start`
 
 
 ## Project Status
-Project is: _in progress_ / _complete_ / _no longer being worked on_. If you are no longer working on it, provide reasons why.
-
+Project is: _complete_ 
 
 ## Room for Improvement
 Include areas you believe need improvement / could be improved. Also add TODOs for future development.
@@ -72,14 +85,12 @@ To do:
 
 
 ## Acknowledgements
-Give credit here.
-- This project was inspired by...
-- This project was based on [this tutorial](https://www.example.com).
-- Many thanks to...
+- This project was created to fulfill the task of linear algebra and geometry
+- Many thanks to Pak Judhi as my lecture for this subject
 
 
 ## Contact
-Created by [@flynerdpl](https://www.flynerd.pl/) - feel free to contact me!
+Created by I Gede Arya Raditya Parameswara, Januar Budi Ghifari, and Rizky Ramadhana P. K.
 
 
 <!-- Optional -->
