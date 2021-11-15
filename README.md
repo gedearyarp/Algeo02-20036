@@ -26,13 +26,13 @@ git clone https://github.com/gedearyarp/Algeo02-20036.git
 ```
 2. Install node.js melalui tautan https://nodejs.org/en/download/
 3. Pastikan juga komputer Anda telah menginstall python, yang bisa didapatkan pada tautan https://www.python.org/downloads/
-4. Buka terminal, masuk ke dalam folder Algeo02-20036/web-algeo/api dan jalankan command berikut
+4. Buka terminal, masuk ke dalam folder Algeo02-20036/src/web-algeo/api dan jalankan command berikut
 ```
 venv\Scripts\activate
 pip install -r requirements.txt
 python api.py
 ```
-5. Buka terminal baru, masuk ke dalam folder Algeo02-20036/web-algeo dan jalankan command berikut
+5. Buka terminal baru, masuk ke dalam folder Algeo02-20036/src/web-algeo dan jalankan command berikut
 ```
 npm install
 npm run start
