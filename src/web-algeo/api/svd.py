@@ -6,9 +6,13 @@ import base64
 import io
 
 def bagiTiapElemen(a,b):
+    #Menerima dua buah vektor berukuran sama dan melakukan pembagian element-wise
+    #Bila penyebut 0, akan mengembalikan 0
     return divide(a,b,out=zeros_like(a, dtype=float),where=b!=0)
 
 def eigenDominan(A, toleransi):
+    #Mengembalikan nilai eigen dan vektor eigen yang bersesuaian dengan nilai eigen paling besar dari sebuah matriks A
+    #Pencarian menggunakan metode power iteration sampai perubahan nilai eigen dibawah batas toleransi atau mencapai 10000 langkah
     m, n = A.shape
     k=min(m,n)
     v = ones(k) / sqrt(k)
@@ -34,6 +38,9 @@ def eigenDominan(A, toleransi):
     return nilaiEigenBaru, vBaru
 
 def svd(A, k=None, toleransi=1):
+    #Mengembalikan hasil dekomposisi svd berupa matriks u,s,v dari sebuah matriks
+    #Elemen u, s, dan v hanya dicari sampai elemen ke k saja untuk menghemat waktu
+    #Pencarian u, s, v diawali dengan pencarian vektor dan nilai eigen menggunakan metode power iteration
     A = array(A, dtype=float)
     m, n = A.shape
         
@@ -65,11 +72,15 @@ def svd(A, k=None, toleransi=1):
     return transpose(us), S, vs
 
 def kompresiSVD(arr,k):
+  #Menerima sebuah array dan banyaknya singular values yang akan digunakan
+  #Mengembalikan hasil kompresi / hasil perkalian u, s, dan v sampai urutan ke-k
   u,s,v=svd(arr,k)
   hasilKompresi=dot(u[:,:k],dot(diag(s[:k]),v[:k,:]))
   return hasilKompresi
 
 def kompresiGambarNLayer(arr,n,k):
+  #Menerima sebuah gambar berbentuk array 'arr' yang memiliki n buah channel
+  #Mengembalikan gambar berbentuk array n channel yang sudah dikompresi dengan k singular values
   hasil=zeros(arr.shape)
   if(n==1):
     hasil=kompresiSVD(arr,k)
@@ -80,6 +91,8 @@ def kompresiGambarNLayer(arr,n,k):
   return hasil
 
 def pertahankanTransparansi(arr):
+  #Menerima sebuah gambar berbentuk array yang mengandung channel transparansi
+  #Mengembalikan gamabr berberntuk array setelah di set seluruh channel menjadi 0 bila channel transparansi bernilai 0
   channel=arr.shape[2]
   layerTrpPixel = [0 for x in range(channel)]
   for i in range(arr.shape[0]):
@@ -89,6 +102,9 @@ def pertahankanTransparansi(arr):
   return arr
 
 def finalisasi(arr,tipe):
+  #Menerima sebuah gambar berupa array dan ekstensi yang bersesuaian
+  #Memastikan nilai pada array berupa bilangan bulat pada skala yang benar
+  #Mengembalikan gambar yang sama namun dalam representasi base64 (string)
   arr=(arr-arr.min())/(arr.max()-arr.min())*255
   im = Image.fromarray(arr.astype(uint8))
   buffered = io.BytesIO()
