@@ -2,6 +2,18 @@
 
 ## Deskripsi Singkat
 
+Tugas Besar 2 IF 2123 Aljabar Linier dan Geometri
+
+Aplikasi Nilai Eigen dan Vektor Eigen dalam Kompresi Gambar
+
+Anggota :
+
+I Gede Arya Raditya Parameswara (13520036)  
+
+Januar Budi Ghifari (13520132)  
+
+Rizky Ramadhana P. K. (13520151)
+
 ## Panduan Penggunaan
 1. Clone repository ini ke komputer Anda dengan menggunakan command 
 ```
